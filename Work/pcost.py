@@ -14,11 +14,16 @@
 # Exercise 1.33: Reading from the command line
 # https://github.com/wlpygit/practical-python/blob/master/Notes/01_Introduction/07_Functions.md#exercise-133-reading-from-the-command-line
 
+# Exercise 3.14: Using more library imports
+# https://github.com/wlpygit/practical-python/blob/master/Notes/03_Program_organization/04_Modules.md#exercise-314-using-more-library-imports
+# Modify the pcost.py file so that it uses the report.read_portfolio() function.
 
 import csv
 import sys
+import fileparse
 
 def portfolio_cost(filename):
+    """     
     f = open(filename)
     rows = csv.reader(f)
     headers=next(rows)
@@ -34,17 +39,27 @@ def portfolio_cost(filename):
             cost += shares*price
         except ValueError:
             print(f'Row {i}: Bad row {row}')
+    """
+    portfolio = fileparse.parse_csv(filename, select=['name','shares','price'],types=[str, int, float])
+    # print(portfolio)
+    cost = 0
+    for r in portfolio:
+        cost += r['shares']*r['price']
 
     return cost
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    filename = 'Data/portfolio.csv'
+# Main function
+def main(argv):
+    # Parse command line args, environment, etc.
+    if len(argv) == 2:
+        filename = argv[1]
+    else:
+        filename = 'Data/portfolio.csv'
 
-# cost = portfolio_cost(filename)
-# cost = portfolio_cost('Data/missing.csv')
-cost = portfolio_cost('Data/portfoliodate.csv')
-print(f'Total cost is: ${cost:0.2f}')
+    cost = portfolio_cost(filename)
+    print(f'Total cost is: ${cost:0.2f}')
 
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
 
