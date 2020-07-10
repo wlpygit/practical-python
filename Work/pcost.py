@@ -21,8 +21,9 @@
 import csv
 import sys
 import fileparse
+import stock
 
-def portfolio_cost(filename):
+def portfolio_cost(file):
     """     
     f = open(filename)
     rows = csv.reader(f)
@@ -40,12 +41,12 @@ def portfolio_cost(filename):
         except ValueError:
             print(f'Row {i}: Bad row {row}')
     """
-    portfolio = fileparse.parse_csv(filename, select=['name','shares','price'],types=[str, int, float])
+    portdicts = fileparse.parse_csv(file, select=['name','shares','price'],types=[str, int, float])
     # print(portfolio)
     cost = 0
-    for r in portfolio:
-        cost += r['shares']*r['price']
-
+    portfolio = [stock.Stock(d['name'],d['shares'],d['price']) for d in portdicts]
+    for s in portfolio:
+        cost += s.shares*s.price
     return cost
 
 # Main function
