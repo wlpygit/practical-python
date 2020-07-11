@@ -22,6 +22,7 @@ import csv
 import sys
 import fileparse
 import stock
+import report
 
 def portfolio_cost(file):
     """     
@@ -41,13 +42,19 @@ def portfolio_cost(file):
         except ValueError:
             print(f'Row {i}: Bad row {row}')
     """
+    # Quote it out after building a portfolio class in Exercise 6.2
+    """     
     portdicts = fileparse.parse_csv(file, select=['name','shares','price'],types=[str, int, float])
     # print(portfolio)
     cost = 0
     portfolio = [stock.Stock(d['name'],d['shares'],d['price']) for d in portdicts]
     for s in portfolio:
-        cost += s.shares*s.price
-    return cost
+        cost += s.shares*s.price 
+    """
+    
+    portfolio = report.read_portfolio(file)
+
+    return portfolio.total_cost
 
 # Main function
 def main(argv):
